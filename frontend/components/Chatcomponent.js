@@ -5,21 +5,12 @@ import { GlobalContext } from "../context"
 import { useNavigation } from "@react-navigation/native"
 
 export default function Chatcomponent({ item }) {
-    const { messages, setMessages } = useContext(GlobalContext)
     const navigation = useNavigation()
-
-    useEffect(() => {
-        if (item.messages && item.messages.length > 0) {
-            setMessages(item.messages[item.messages.length - 1])
-        } else {
-            setMessages({ text: 'Tap to start messaging', time: 'Now' })
-        }
-    }, [item.messages])
 
     function handleNavigateToMessageScreen(){
         navigation.navigate('Messagescreen', {
             currentGroupName: item.currentGroupName,
-            id: item.id})
+            currentGroupID: item.id})
     }
 
     return (
@@ -31,12 +22,12 @@ export default function Chatcomponent({ item }) {
                 <View>
                     <Text style={styles.userName}>{item.currentGroupName}</Text>
                     <Text style={styles.message}>
-                        {messages.text}
+                        {item && item.messages && item.messages.length ? item.messages[item.messages.length -1].text : 'Tap to start messaging'}
                     </Text>
                 </View>
                 <View>
                     <Text style={styles.time}>
-                        {messages.time}
+                        {item && item.messages && item.messages.length ? item.messages[item.messages.length -1].time : "Now"}
                     </Text>
                 </View>
             </View>
