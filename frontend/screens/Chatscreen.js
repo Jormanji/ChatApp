@@ -6,7 +6,7 @@ import { useRoute } from '@react-navigation/native';
 import { useContext } from "react"
 import { GlobalContext } from "../context/index"
 import { AntDesign } from '@expo/vector-icons'
-import Chatcomponent from '../components/Chatcomponent';
+import Chatcomponent from '../components/Chatcomponent'
 import NewGroupModal from '../components/Modal';
 import {socket} from "../utils/index"
 
@@ -23,6 +23,7 @@ const Chatscreen = ({ navigation }) => {
 
         socket.on('groupList', (groups)=> {
             console.log(groups)
+            setAllChatRooms.setAllChatRooms(groups)
         })
 
     }, [socket])
@@ -49,7 +50,7 @@ const Chatscreen = ({ navigation }) => {
                     <FlatList>
                         data={chatRooms.allChatRooms}
                         renderItem={({ item }) => <Chatcomponent item={item} />}
-                        keyExtractor={({ item }) => item.id}
+                        keyExtractor={({ item }) => item.id.toString()}
                     </FlatList> : null
             }
         </View>
