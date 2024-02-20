@@ -10,6 +10,9 @@ function GlobalState({ children }) {
     const [allChatRooms, setAllChatRooms] = useState([])
     const [modalVisible, setModalVisible] = useState(false)
     const [currentGroupName, setCurrentGroupName] = useState('')
+    const [messages, setMessages] = useState({})
+    const [allChatMessages, setAllChatMessages] = useState([])
+    const [currentChatMessage, setCurrentChatMessage] = useState('')
 
     return <GlobalContext.Provider value={{ 
         showLoginView, setShowLoginView, 
@@ -18,7 +21,10 @@ function GlobalState({ children }) {
         allUsers, setAllUsers,
         allChatRooms, setAllChatRooms,
         modalVisible, setModalVisible,
-        currentGroupName, setCurrentGroupName}}>{children}</GlobalContext.Provider>
+        currentGroupName, setCurrentGroupName,
+        messages, setMessages,
+        allChatMessages, setAllChatMessages,
+        currentChatMessage, setCurrentChatMessage}}>{children}</GlobalContext.Provider>
 }
 
 export default GlobalState;

@@ -8,7 +8,7 @@ import { GlobalContext } from "../context/index"
 import { AntDesign } from '@expo/vector-icons'
 import Chatcomponent from '../components/Chatcomponent'
 import NewGroupModal from '../components/Modal';
-import {socket} from "../utils/index"
+import { socket } from "../utils/index"
 
 const Chatscreen = ({ navigation }) => {
     const loggedInUser = useContext(GlobalContext)
@@ -16,24 +16,35 @@ const Chatscreen = ({ navigation }) => {
     const modalVisible = useContext(GlobalContext)
     const setModalVisible = useContext(GlobalContext)
     const setAllChatRooms = useContext(GlobalContext)
+    const setCurrentUser = useContext(GlobalContext)
+    const setShowLoginView = useContext(GlobalContext)
 
 
     useEffect(() => {
         socket.emit('getAllGroups');
 
-        socket.on('groupList', (groups)=> {
-            console.log(groups)
+        socket.on('groupList', (groups) => {
+            console.log(groups, "groups")
             setAllChatRooms.setAllChatRooms(groups)
         })
 
     }, [socket])
+
+    function handleLogout() {
+        setCurrentUser.setCurrentUser('')
+        setShowLoginView.setShowLoginView(false)
+    }
+
+    useEffect(() => {
+        if(loggedInUser.currentUser.trim() === '') navigation.navigate('Homescreen')
+    }, [loggedInUser.currentUser])
 
 
     return <View style={styles.mainWrapper}>
         <View style={styles.topContainer}>
             <View style={styles.header}>
                 <Text style={styles.heading}>Welcome {loggedInUser.currentUser} </Text>
-                <Pressable>
+                <Pressable onPress={handleLogout}>
                     <AntDesign name="logout" size={30} color={'black'} />
                 </Pressable>
             </View>
@@ -45,14 +56,11 @@ const Chatscreen = ({ navigation }) => {
             </View>
         </View>
         <View style={styles.listContainer}>
-            {
-                chatRooms.allChatRooms && chatRooms.allChatRooms.length > 0 ?
-                    <FlatList>
-                        data={chatRooms.allChatRooms}
-                        renderItem={({ item }) => <Chatcomponent item={item} />}
-                        keyExtractor={({ item }) => item.id.toString()}
-                    </FlatList> : null
-            }
+            <FlatList
+                data={chatRooms.allChatRooms}
+                renderItem={({ item }) => <Chatcomponent item={item} />}
+                keyExtractor={(item) => item.id.toString()}
+            />
         </View>
         <View style={styles.bottomContainer}>
             <Pressable onPress={() => setModalVisible.setModalVisible(true)} style={styles.button}>
