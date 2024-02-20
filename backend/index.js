@@ -4,7 +4,7 @@ const http = require("http").Server(app);
 const cors = require("cors");
 const socketIO = require("socket.io")(http, {
   cors: {
-    origin: "YOUR IP ADDRESS HERE",
+    origin: "http://192.168.86.32:3000/",
   },
 });
 
@@ -21,7 +21,7 @@ app.use(express.json());
 app.use(cors());
 
 socketIO.on("connection", (socket) => {
-  console.log(`${socket.id} user is connected`);
+  console.log(`${socket.id} user has connected`);
 
   socket.on("getAllGroups", () => {
     socket.emit("groupList", chatgroups);
